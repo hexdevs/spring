@@ -2,7 +2,7 @@ require "spring/errors"
 
 module Spring
   class << self
-    attr_accessor :application_root
+    attr_accessor :application_root, :disabled_by_default
     attr_writer :quiet
 
     def gemfile
@@ -57,6 +57,14 @@ module Spring
       @quiet || ENV.key?('SPRING_QUIET')
     end
 
+    def enabled?
+      return false if ENV['DISABLE_SPRING'] == '1'
+
+      return ENV['ENABLE_SPRING'] == '1' if disabled_by_default
+
+      true
+    end
+
     private
 
     def find_project_root(current_dir)
@@ -71,4 +79,5 @@ module Spring
   end
 
   self.quiet = false
+  self.disabled_by_default = false
 end

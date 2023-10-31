@@ -27,7 +27,7 @@ module Spring
     }
 
     def self.run(args)
-      command_for(args.first).call(args)
+      command_for(args.first).call(args) if Spring.enabled?
     rescue CommandNotFound
       Client::Help.call(args)
     rescue ClientError => e
